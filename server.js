@@ -5,9 +5,17 @@ const BASEURL = process.env.BASEURL
 const express = require('express');
 const bodyParser = require('body-parser');
 const twilio = require('twilio');
+const makeCall = require('./makeCall');
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false } ));
+app.use(bodyParser.urlencoded({ extended: true } ));
+
+
+app.post('/smartCall', (req, res)=> {
+  //makeCall()
+  console.log(req.body)
+  res.send("Done")
+})
 
 app.get('/action/digit', (req, res) => {
   console.log("PINged")
@@ -16,11 +24,11 @@ app.get('/action/digit', (req, res) => {
     action: `${process.env.BASEURL}/action/digit`,
     input: 'speech',
     timeout: 4,
-    hints: ['cat', 'hello'],
+    hints: ['yes', 'no'],
     method: 'POST'
   });
 
-  gather.say("Hello user, please say CAT");
+  gather.say("Hello there, this is a call from Health Insure. Please say Yes to continue or NO to disconnect the call.");
 
   twiml.redirect({
     method: 'GET'
